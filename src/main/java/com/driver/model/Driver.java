@@ -1,6 +1,4 @@
 package com.driver.model;
-
-import jdk.jfr.DataAmount;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
