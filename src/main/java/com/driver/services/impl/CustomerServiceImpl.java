@@ -34,17 +34,26 @@ public class CustomerServiceImpl implements CustomerService {
 	public void deleteCustomer(Integer customerId) {
 		// Delete customer without using deleteById function
 		Customer customer = customerRepository2.findById(customerId).get();
-
 		List<TripBooking> bookedTrips = customer.getTripBookingList();
 
-		for (TripBooking trip : bookedTrips){
+		//Now we will set the cab as available for each and every trip booked by this customer,
+		//who is going to be deleted
+
+		for(TripBooking trip : bookedTrips){
 			Driver driver = trip.getDriver();
 			Cab cab = driver.getCab();
 			cab.setAvailable(true);
 			driverRepository2.save(driver);
-			trip.setTripStatus(TripStatus.CANCELED);
+			trip.setStatus(TripStatus.CANCELED);
 		}
 
+		/* We are doing all these above things because customer table is not joined with the driver or cab table
+		 * directly, hence cascading will not work for the driver here, therefore, we are making the changes
+		 * by manually, and since driver is parent and cab is child making changes in parent (driver) will
+		 * automatically make changes in child (cab)*/
+
+		//Now we will delete the customer from the repository and as a result of cascading effect trips will also
+		//be deleted
 		customerRepository2.delete(customer);
 	}
 
@@ -52,11 +61,12 @@ public class CustomerServiceImpl implements CustomerService {
 	public TripBooking bookTrip(int customerId, String fromLocation, String toLocation, int distanceInKm) throws Exception{
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
+
 		List<Driver> driverList = driverRepository2.findAll();
 		Driver driver = null;
 		for(Driver currDriver : driverList){
 			if(currDriver.getCab().getAvailable()){
-				if((driver == null) || (currDriver.getDriverID() < driver.getDriverID())){
+				if((driver == null) || (currDriver.getDriverId() < driver.getDriverId())){
 					driver = currDriver;
 				}
 			}
@@ -70,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
 		newTripBooked.setFromLocation(fromLocation);
 		newTripBooked.setToLocation(toLocation);
 		newTripBooked.setDistanceInKm(distanceInKm);
-		newTripBooked.setTripStatus(TripStatus.CONFIRMED);
+		newTripBooked.setStatus(TripStatus.CONFIRMED);
 		newTripBooked.setDriver(driver);
 		int rate = driver.getCab().getPerKmRate();
 		newTripBooked.setBill(distanceInKm*rate);
@@ -91,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void cancelTrip(Integer tripId){
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking bookedTrip = tripBookingRepository2.findById(tripId).get();
-		bookedTrip.setTripStatus(TripStatus.CANCELED);
+		bookedTrip.setStatus(TripStatus.CANCELED);
 		bookedTrip.setBill(0);
 		bookedTrip.getDriver().getCab().setAvailable(true);
 		tripBookingRepository2.save(bookedTrip);
@@ -101,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId){
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking bookedTrip = tripBookingRepository2.findById(tripId).get();
-		bookedTrip.setTripStatus(TripStatus.COMPLETED);
+		bookedTrip.setStatus(TripStatus.COMPLETED);
 		bookedTrip.getDriver().getCab().setAvailable(true);
 		tripBookingRepository2.save(bookedTrip);
 	}

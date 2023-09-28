@@ -1,51 +1,48 @@
 package com.driver.model;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "Customer")
 public class Customer{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int customerID;
+    int customerId;
 
-    String customerMobileNo;
+    String mobile;
 
     String password;
 
+    //For Mapping
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<TripBooking> tripBookingList = new ArrayList<>();
 
     public Customer() {
     }
 
-    public Customer(int customerID, String mobileNo, String password) {
-        this.customerID = customerID;
-        this.customerMobileNo = mobileNo;
+    public Customer(int customerId, String mobile, String password, List<TripBooking> tripBookingList) {
+        this.customerId = customerId;
+        this.mobile = mobile;
         this.password = password;
+        this.tripBookingList = tripBookingList;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public String getMobileNo() {
-        return customerMobileNo;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setMobileNo(String mobileNo) {
-        this.customerMobileNo = mobileNo;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPassword() {
@@ -58,5 +55,9 @@ public class Customer{
 
     public List<TripBooking> getTripBookingList() {
         return tripBookingList;
+    }
+
+    public void setTripBookingList(List<TripBooking> tripBookingList) {
+        this.tripBookingList = tripBookingList;
     }
 }

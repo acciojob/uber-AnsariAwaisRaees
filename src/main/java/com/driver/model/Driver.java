@@ -1,53 +1,56 @@
 package com.driver.model;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@FieldDefaults(level = AccessLevel.PACKAGE)
 @Entity
 @Table(name = "Driver")
 public class Driver{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int driverID;
+    int driverId;
 
-    String driverMobileNo;
+    String mobile;
 
     String password;
 
+    //For mapping to tripBooking(Child)
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     List<TripBooking> tripBookingList = new ArrayList<>();
 
+    //For mapping to Cab(Parent)
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
     Cab cab;
 
     public Driver() {
+
     }
 
-    public Driver(int driverID, String driverMobileNo, String password) {
-        this.driverID = driverID;
-        this.driverMobileNo = driverMobileNo;
+
+
+    public Driver(int driverId, String mobile, String password, List<TripBooking> tripBookingList, Cab cab) {
+        this.driverId = driverId;
+        this.mobile = mobile;
         this.password = password;
+        this.tripBookingList = tripBookingList;
+        this.cab = cab;
     }
 
-    public int getDriverID() {
-        return driverID;
+    public int getDriverId() {
+        return driverId;
     }
 
-    public void setDriverID(int driverID) {
-        this.driverID = driverID;
+    public void setDriverId(int driverId) {
+        this.driverId = driverId;
     }
 
-    public String getDriverMobileNo() {
-        return driverMobileNo;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setDriverMobileNo(String driverMobileNo) {
-        this.driverMobileNo = driverMobileNo;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPassword() {
@@ -56,6 +59,14 @@ public class Driver{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<TripBooking> getTripBookingList() {
+        return tripBookingList;
+    }
+
+    public void setTripBookingList(List<TripBooking> tripBookingList) {
+        this.tripBookingList = tripBookingList;
     }
 
     public Cab getCab() {

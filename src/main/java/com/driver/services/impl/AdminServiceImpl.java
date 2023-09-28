@@ -26,7 +26,8 @@ public class AdminServiceImpl implements AdminService {
 	CustomerRepository customerRepository1;
 
 	@Override
-	public void adminRegister(Admin admin){
+	public void adminRegister(Admin admin) {
+		//Save the admin in the database
 		adminRepository1.save(admin);
 	}
 
@@ -38,6 +39,7 @@ public class AdminServiceImpl implements AdminService {
 		adminRepository1.save(admin);
 
 		return admin;
+
 	}
 
 	@Override

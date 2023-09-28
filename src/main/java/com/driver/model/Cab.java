@@ -1,54 +1,50 @@
 package com.driver.model;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
+
+
 @Entity
 @Table(name = "Cab")
-public
-class Cab{
+public class Cab{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int Id;
 
-    int perKM;
+    int perKmRate;
 
     boolean available;
 
-    public Cab() {
-    }
 
+    //For mapping
     @OneToOne
     @JoinColumn
     Driver driver;
 
-    public Cab(int id, int perKM, boolean available) {
-        this.id = id;
-        this.perKM = perKM;
-        this.available = available;
+
+
+    public Cab() {
+
     }
 
     public int getId() {
-        return id;
+        return Id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        Id = id;
     }
 
-    public int getPerKM() {
-        return perKM;
+    public int getPerKmRate() {
+        return perKmRate;
     }
 
-    public void setPerKM(int perKM) {
-        this.perKM = perKM;
+    public void setPerKmRate(int perKmRate) {
+        this.perKmRate = perKmRate;
     }
 
-    public boolean isAvailable() {
+    public boolean getAvailable() {
         return available;
     }
 
@@ -56,11 +52,11 @@ class Cab{
         this.available = available;
     }
 
-    public boolean getAvailable() {
-        return available;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public int getPerKmRate() {
-        return perKM;
+    public void setDriver(Driver driver) {
+        this.driver= driver;
     }
 }

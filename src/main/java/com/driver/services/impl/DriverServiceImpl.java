@@ -24,14 +24,16 @@ public class DriverServiceImpl implements DriverService {
 		Driver driver = new Driver();
 
 		Cab cab = new Cab();
-		cab.setPerKM(10);
+		cab.setPerKmRate(10);
 		cab.setAvailable(true);
 
-		driver.setDriverMobileNo(mobile);
+		driver.setMobile(mobile);
 		driver.setPassword(password);
 		driver.setCab(cab);
 
-		driverRepository3.save(driver); //We will not save driver explicitly because of cascading effect (here driver is child and cab is parent)
+		driverRepository3.save(driver);
+
+		//We will not save driver explicitly because of cascading effect (here driver is child and cab is parent)
 	}
 
 	@Override
@@ -39,6 +41,7 @@ public class DriverServiceImpl implements DriverService {
 		// Delete driver without using deleteById function
 		Driver driver = driverRepository3.findById(driverId).get();
 		driverRepository3.delete(driver);
+
 	}
 
 	@Override
