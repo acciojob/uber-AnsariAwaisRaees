@@ -60,4 +60,5 @@ public class AdminServiceImpl implements AdminService {
 		//Find the list of all customers
 		return customerRepository1.findAll();
 	}
+
 }
